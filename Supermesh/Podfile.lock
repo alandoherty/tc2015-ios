@@ -1,0 +1,15 @@
+PODS:
+  - CocoaAsyncSocket (7.4.2)
+  - CocoaFFmpeg (2.2.0):
+    - CocoaFFmpeg/precompiled (= 2.2.0)
+  - CocoaFFmpeg/precompiled (2.2.0)
+
+DEPENDENCIES:
+  - CocoaAsyncSocket
+  - CocoaFFmpeg
+
+SPEC CHECKSUMS:
+  CocoaAsyncSocket: f5783bdedd232d91b89769bc4b5a1580aed518ad
+  CocoaFFmpeg: 369bea9f0ae2b0ab674c986b3681073f58058eb8
+
+COCOAPODS: 0.39.0
