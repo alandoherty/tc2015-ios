@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import <CFNetwork/CFNetwork.h>
 #import "CocoaAsyncSocket.h"
 #import "avcodec.h"
 
@@ -20,30 +21,22 @@
 
 // set up method to decode frame
 static int decode_write_frame(const char *outfilename, AVCodecContext *avctx, AVFrame *frame, AVPacket *pkt, int last) {
-    
-    int len, got_frame;
-    char buf[1024];
-    
-    len = avcodec_decode_video2(avctx, frame, &got_frame, pkt);
-    if(len < 0) {
-        // decoding failed
-    }
-    if(got_frame) {
-        // we have the frame
-        
-    }
+    return -1;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // register ALL the avcodec bits and pieces
-    avcodec_register_all();
+    //avcodec_register_all();
     
     // Do any additional setup after loading the view, typically from a nib.
     UdpSocket = [[AsyncUdpSocket alloc] initWithDelegate:self];
-    if (![UdpSocket bindToPort:21369 error:nil])
-        NSLog(@"Bind error");
+    [UdpSocket bindToPort:1338 error:nil];
+    
+    //if (![UdpSocket bindToAddress:@"127.0.0.1" port:1338 error:nil])
+    //NSLog(@"Bind error");
+        
     [UdpSocket receiveWithTimeout:-1 tag:1];
 }
 
@@ -52,14 +45,143 @@ static int decode_write_frame(const char *outfilename, AVCodecContext *avctx, AV
     // Dispose of any resources that can be recreated.
 }
 
+typedef struct {
+    char magic[4];
+    int8_t opcode;
+    int32_t length;
+} SMPacketHeader;
+
+typedef struct {
+    int8_t opcode;
+    void* data;
+    int32_t size;
+} SMPacket;
+
+
+typedef struct {
+    char inputFormat[32];
+    char outputFormat[32];
+    int32_t numFrames;
+} SMConfig;
+
+
+void* SMMakeMeAPacket(int8_t opcode, void* buffer, int32_t size) {
+    // create buffer
+    void* buff = malloc(size + sizeof(SMPacketHeader));
+    memset(buff, 0, size + sizeof(SMPacketHeader));
+    
+    // header
+    SMPacketHeader header;
+    header.magic[0] = 'S';
+    header.magic[1] = 'U';
+    header.magic[2] = 'P';
+    header.magic[3] = 'R';
+    header.length = size;
+    header.opcode = opcode;
+    
+    // copy header to buffer
+    memcpy(buff, (void*)&header, sizeof(SMPacketHeader));
+    
+    // copy data
+    memcpy(&buff[sizeof(SMPacketHeader)], buffer, size);
+    
+    return buff;
+}
+
+SMPacket* SMGiveMeAPacket(const void* buffer, int32_t size) {
+    // check for idiots
+    if (size < sizeof(SMPacketHeader))
+        return NULL;
+    
+    // header
+    SMPacketHeader* header = (SMPacketHeader*)malloc(sizeof(SMPacketHeader));
+    memcpy(header, buffer, sizeof(SMPacketHeader));
+    
+    if (header->magic[0] != 'S' || header->magic[1] != 'U' || header->magic[2] != 'P' || header->magic[3] != 'R') {
+        NSLog(@"[supermesh] bad packet, probably not us so...");
+        free(header);
+        return NULL;
+    }
+    
+    /*printf("%x %x %x %x %x %x %x %x %x %x %x %x %x %x", ((char*)buffer)[0], ((char*)buffer)[1], ((char*)buffer)[2],
+           ((char*)buffer)[3], ((char*)buffer)[4], ((char*)buffer)[5], ((char*)buffer)[6], ((char*)buffer)[7], ((char*)buffer)[8],
+           ((char*)buffer)[9], ((char*)buffer)[10], ((char*)buffer)[11], ((char*)buffer)[12], ((char*)buffer)[13]);*/
+    
+    // create packet
+    SMPacket* packet = (SMPacket*)malloc(sizeof(SMPacket));
+    
+    if (packet == NULL) {
+        NSLog(@"[supermesh] failed to allocate packet");
+        return NULL;
+    }
+    
+    packet->opcode = header->opcode;
+    packet->size = header->length;
+    
+    // check if length
+    if (header->length > 10000000) {
+        free(header);
+        printf("[supermesh] packet too big: %i", header->length);`
+        return NULL;
+    }
+    
+    // copy buffer to packet
+    void* packetBuff = malloc(header->length);
+    
+    // check if successful
+    if (packetBuff == NULL) {
+        NSLog(@"[supermesh] failed to allocate packet data");
+        free(packet);
+        free(header);
+        return NULL;
+    }
+    
+    memcpy(packetBuff, &buffer[sizeof(SMPacketHeader)], header->length);
+    packet->data = packetBuff;
+    free(header);
+    
+    return packet;
+}
+
+void SMDestroyPacket(SMPacket* packet) {
+    // check for idiots
+    if (packet == NULL)
+        return;
+    
+    // free
+    free(packet->data);
+    free(packet);
+}
+
 -(BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data
            withTag:(long)tag
           fromHost:(NSString *)host
               port:(UInt16)port
 {
+    // create packet
+    SMPacket* packet = SMGiveMeAPacket(data.bytes, (int32_t)data.length);
+    
+    if (packet == NULL) {
+        goto error_eww;
+    }
+    
+    if (packet->opcode == 0) {
+        SMConfig* config = (SMConfig*)packet->data;
+        NSString* str = [NSString stringWithUTF8String:config->inputFormat];
+    }
+    
+    if (packet->opcode == 1) {
+        char* blah = malloc(6);
+        blah[5] = '\0';
+        memcpy(blah, packet->data, 5);
+        printf("Hey we got: %s", blah);
+    }
+    
+    // destroy packet
+    SMDestroyPacket(packet);
     NSLog(@"Received UDP Packet");
     
-    // deal with the data, put into libav
+    /* deal with the data, put into libav
     int got_picture, len;
     
     AVFrame *frame;
@@ -84,25 +206,13 @@ static int decode_write_frame(const char *outfilename, AVCodecContext *avctx, AV
     
     frame = avcodec_alloc_frame();
     avpkt.data = inbuf;
-    while(avpkt.size > 0) {
+while(avpkt.size > 0) {
         if(decode_write)
-    }
+    } */
     
-    // send the encoded data back to the server
-    UInt8 *bytes = (UInt8 *)data.bytes;
-    if (data.length >= 4)
-        NSLog(@"Byte0: %d, Byte1: %d, Byte2: %d, Byte3: %d", bytes[0], bytes[1], bytes[2], bytes[3]);
     
-    //TX RESPONSE
-    UInt8 TxDataBytes[10];
-    int TxDataIndex = 0;
-				
-    TxDataBytes[TxDataIndex++] = 0x01;
-    TxDataBytes[TxDataIndex++] = 0x02;
-    TxDataBytes[TxDataIndex++] = 0x03;
-    TxDataBytes[TxDataIndex++] = 0x04;
-    
-    NSData *TxData = [NSData dataWithBytes:&TxDataBytes length:TxDataIndex];
+
+    /*NSData *TxData = [NSData dataWithBytes:&header length:TxDataIndex];
 				
     [UdpSocket sendData:TxData
                   toHost:host
@@ -110,7 +220,8 @@ static int decode_write_frame(const char *outfilename, AVCodecContext *avctx, AV
              withTimeout:2.0		//Seconds
                      tag:0];
     
-    
+    */
+error_eww:
     [UdpSocket receiveWithTimeout:-1 tag:1];			//Setup to receive next UDP packet
     return YES;			//Signal that we didn't ignore the packet.
 }

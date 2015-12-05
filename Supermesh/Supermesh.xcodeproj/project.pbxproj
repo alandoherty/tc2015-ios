@@ -27,6 +27,7 @@
 		7D2313281C136BCD00FDA1B8 /* config.log in Resources */ = {isa = PBXBuildFile; fileRef = 7D2313211C136BCD00FDA1B8 /* config.log */; };
 		7D2313291C136BCD00FDA1B8 /* config.log in Resources */ = {isa = PBXBuildFile; fileRef = 7D2313231C136BCD00FDA1B8 /* config.log */; };
 		7D23132A1C136BCD00FDA1B8 /* config.log in Resources */ = {isa = PBXBuildFile; fileRef = 7D2313251C136BCD00FDA1B8 /* config.log */; };
+		7D23132C1C13978E00FDA1B8 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D23132B1C13978E00FDA1B8 /* CFNetwork.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -136,6 +137,7 @@
 		7D2313211C136BCD00FDA1B8 /* config.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.log; sourceTree = "<group>"; };
 		7D2313231C136BCD00FDA1B8 /* config.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.log; sourceTree = "<group>"; };
 		7D2313251C136BCD00FDA1B8 /* config.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.log; sourceTree = "<group>"; };
+		7D23132B1C13978E00FDA1B8 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		9F23BACE93658B18A9C7FF57 /* Pods-Supermesh.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Supermesh.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Supermesh/Pods-Supermesh.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,6 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D23132C1C13978E00FDA1B8 /* CFNetwork.framework in Frameworks */,
 				7D2313181C136BBD00FDA1B8 /* libavutil.a in Frameworks */,
 				7D2313161C136BBD00FDA1B8 /* libavfilter.a in Frameworks */,
 				23BFD38A96AD38C2879A9F87 /* libPods-Supermesh.a in Frameworks */,
@@ -161,6 +164,7 @@
 		557DF08D954505AD130C271B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7D23132B1C13978E00FDA1B8 /* CFNetwork.framework */,
 				386C21E60AC073E7F97CEB2B /* libPods-Supermesh.a */,
 			);
 			name = Frameworks;
