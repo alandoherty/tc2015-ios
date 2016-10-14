@@ -138,6 +138,7 @@
 		7D2313231C136BCD00FDA1B8 /* config.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.log; sourceTree = "<group>"; };
 		7D2313251C136BCD00FDA1B8 /* config.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.log; sourceTree = "<group>"; };
 		7D23132B1C13978E00FDA1B8 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		7D23132D1C13D74300FDA1B8 /* SMNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMNetwork.h; path = "../../tc2015-core/supermeshcore/include/SMNetwork.h"; sourceTree = SOURCE_ROOT; };
 		9F23BACE93658B18A9C7FF57 /* Pods-Supermesh.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Supermesh.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Supermesh/Pods-Supermesh.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -193,6 +194,7 @@
 		7D2312971C13683700FDA1B8 /* Supermesh */ = {
 			isa = PBXGroup;
 			children = (
+				7D23132D1C13D74300FDA1B8 /* SMNetwork.h */,
 				7D23129B1C13683700FDA1B8 /* AppDelegate.h */,
 				7D23129C1C13683700FDA1B8 /* AppDelegate.m */,
 				7D23129E1C13683700FDA1B8 /* ViewController.h */,

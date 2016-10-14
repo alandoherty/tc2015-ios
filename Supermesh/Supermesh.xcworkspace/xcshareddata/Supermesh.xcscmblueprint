@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B22A04E667D3A414C52238187BF680E03E3A531B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "B22A04E667D3A414C52238187BF680E03E3A531B" : 0,
+    "98B953909BC76215D76C228DDD02FF7D3CE3576B" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "08AC5AF2-7A07-4F8A-8036-86AEF56ACE49",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "B22A04E667D3A414C52238187BF680E03E3A531B" : "tc2015-ios\/",
+    "98B953909BC76215D76C228DDD02FF7D3CE3576B" : "tc2015-core\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Supermesh",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Supermesh\/Supermesh.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/alandoherty\/tc2015-core.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "98B953909BC76215D76C228DDD02FF7D3CE3576B"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/alandoherty\/tc2015-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B22A04E667D3A414C52238187BF680E03E3A531B"
+    }
+  ]
+}
